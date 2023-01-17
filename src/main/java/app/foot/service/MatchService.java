@@ -2,6 +2,7 @@ package app.foot.service;
 
 import app.foot.model.Match;
 import app.foot.repository.MatchRepository;
+import app.foot.repository.entity.MatchEntity;
 import app.foot.repository.mapper.MatchMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

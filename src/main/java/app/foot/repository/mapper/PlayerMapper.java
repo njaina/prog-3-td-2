@@ -24,4 +24,28 @@ public class PlayerMapper {
                 .isOwnGoal(entity.isOwnGoal())
                 .build();
     }
+    /**
+     *  public AuthorEntity toDomain(CreateAuthorResponse rest) {
+     *         return AuthorEntity.builder()
+     *                 .name(rest.getName())
+     *                 .particularity(rest.getParticularity())
+     *                 .build();
+     *     }
+     *
+     *       @GetMapping("/authors")
+     *     public List<AuthorResponse> getBooks() {
+     *         return service.getAuthors().stream()
+     *                 .map(mapper::toRest)
+     *                 .toList();
+     *     }
+     *       @PostMapping("/authors")
+     *     public List<AuthorResponse> createBooks(@RequestBody List<CreateAuthorResponse> toCreate) {
+     *         List<AuthorEntity> domain = toCreate.stream()
+     *                 .map(mapper::toDomain)
+     *                 .toList();
+     *         return service.createAuthors(domain).stream()
+     *                 .map(mapper::toRest)
+     *                 .toList();
+     *     }
+     * */
 }
