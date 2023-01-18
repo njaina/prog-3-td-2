@@ -1,12 +1,11 @@
 package app.foot.controller;
 
 import app.foot.model.Match;
+import app.foot.model.PlayerScorer;
 import app.foot.repository.entity.MatchEntity;
 import app.foot.service.MatchService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -20,6 +19,9 @@ public class MatchController {
     public List<Match> getMatches() {
         return service.getMatches();
     }
-    @PostMapping("/matches")
-    public List<MatchEntity> create(List<MatchEntity> c){ return service.create(c);}
+    /**@PostMapping("/matches/{matchId}/goals")
+    public Match addGoals(@PathVariable int matchId, @RequestBody List<PlayerScorer> scorers) {
+        scorers.forEach(validator::accept);
+        return service.addGoals(matchId, scorers);
+    }*/
 }
