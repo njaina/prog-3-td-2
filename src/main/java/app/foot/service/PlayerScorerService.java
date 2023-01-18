@@ -11,15 +11,16 @@ import java.util.List;
 
 @AllArgsConstructor
 @Service
-public class PlayerScoreService {
+public class PlayerScorerService {
     private final PlayerScoreRepository repository;
+
     private final PlayerMapper mapper;
-    /**public List<PlayerScorer> newScore(List<PlayerScorer> scorer){
-        List<PlayerScorer> domain = scorer.stream()
+    public List<PlayerScorer> getScrore(){
+        return repository.findAll().stream().map(mapper::toDomain).toList();
+    }
+    public List<PlayerScorer> newScore(List<PlayerScoreEntity> scorer){
+        return repository.saveAll(scorer).stream()
                 .map(mapper::toDomain)
                 .toList();
-        return repository.saveAll(domain).stream()
-                .map(mapper::toDomain)
-                .toList();
-    }*/
+    }
 }

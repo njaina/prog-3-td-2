@@ -24,6 +24,7 @@ public class PlayerMapper {
                 .isOwnGoal(entity.isOwnGoal())
                 .build();
     }
+
     /**
      *  public AuthorEntity toDomain(CreateAuthorResponse rest) {
      *         return AuthorEntity.builder()
