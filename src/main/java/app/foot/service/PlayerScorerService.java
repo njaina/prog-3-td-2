@@ -1,5 +1,6 @@
 package app.foot.service;
 
+import app.foot.model.Player;
 import app.foot.model.PlayerScorer;
 import app.foot.repository.PlayerScoreRepository;
 import app.foot.repository.entity.PlayerScoreEntity;
@@ -19,8 +20,13 @@ public class PlayerScorerService {
         return repository.findAll().stream().map(mapper::toDomain).toList();
     }
     public List<PlayerScorer> newScore(List<PlayerScoreEntity> scorer){
-        return repository.saveAll(scorer).stream()
-                .map(mapper::toDomain)
-                .toList();
+        PlayerScorer minute = null;
+        Player player = null;
+        if(minute.getMinute()>=0 && minute.getMinute()<=90 || player.getIsGuardian()==false ){
+            return repository.saveAll(scorer).stream()
+                    .map(mapper::toDomain)
+                    .toList();
+        }
+        throw new RuntimeException("There is an error, please verify again");
     }
 }
