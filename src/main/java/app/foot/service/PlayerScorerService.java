@@ -1,5 +1,6 @@
 package app.foot.service;
 
+import app.foot.model.Match;
 import app.foot.model.Player;
 import app.foot.model.PlayerScorer;
 import app.foot.repository.PlayerScoreRepository;
