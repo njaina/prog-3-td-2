@@ -8,14 +8,19 @@ import app.foot.repository.TeamRepository;
 import app.foot.repository.entity.MatchEntity;
 import app.foot.repository.entity.PlayerEntity;
 import app.foot.repository.entity.PlayerScoreEntity;
+import app.foot.repository.entity.TeamEntity;
 import app.foot.repository.mapper.PlayerMapper;
 import org.junit.jupiter.api.Test;
+import org.mockito.stubbing.OngoingStubbing;
+import utils.TestUtils;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static java.util.Optional.empty;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static utils.TestUtils.*;
@@ -99,5 +104,23 @@ public class PlayerMapperTest {
                 .ownGoal(false)
                 .match(matchEntity1)
                 .build(), actual);
+    }
+    @Test
+    void player_to_entity_ok() {
+        Player domain = playerModelRakoto(entityRakoto());
+        TeamEntity teamEntity = teamBarea();
+        when(teamRepositoryMock.findByName(domain.getTeamName()))
+                .thenReturn(teamEntity);
+
+        PlayerEntity expected = PlayerEntity.builder()
+                .id(domain.getId())
+                .name(domain.getName())
+                .team(teamEntity)
+                .guardian(domain.getIsGuardian())
+                .build();
+
+        PlayerEntity actual = subject.toEntity(domain);
+
+        assertEquals(expected, actual);
     }
 }
