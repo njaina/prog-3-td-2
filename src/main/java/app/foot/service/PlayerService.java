@@ -2,6 +2,7 @@ package app.foot.service;
 
 import app.foot.model.Player;
 import app.foot.repository.PlayerRepository;
+import app.foot.repository.PlayerScoreRepository;
 import app.foot.repository.mapper.PlayerMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,8 @@ import java.util.stream.Collectors;
 public class PlayerService {
     private final PlayerRepository repository;
     private final PlayerMapper mapper;
+
+    private final PlayerScoreRepository playerScoreRepository;
 
     public List<Player> getPlayers() {
         return repository.findAll().stream()
@@ -28,4 +31,8 @@ public class PlayerService {
                 .map(mapper::toDomain)
                 .collect(Collectors.toUnmodifiableList());
     }
+    public Player updatePlayer(app.foot.model.Player player) {
+        return mapper.toDomain(repository.save(mapper.toUpdate(player)));
+    }
+
 }
