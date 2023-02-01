@@ -94,6 +94,30 @@ class PlayerIntegrationTest {
         assertEquals(1, actual.size());
         assertEquals(toCreate, actual.get(0).toBuilder().id(null).build());
     }
+    @Test
+    void update_player_ok() throws Exception {
+        Player original = player1();
+        Player updated = player1().toBuilder().name("John Doe").build();
+
+        mockMvc.perform(post("/players")
+                .content(objectMapper.writeValueAsString(List.of(original)))
+                .contentType("application/json")
+                .accept("application/json"));
+
+        MockHttpServletResponse response = mockMvc
+                .perform(post("/players")
+                        .content(objectMapper.writeValueAsString(List.of(updated)))
+                        .contentType("application/json")
+                        .accept("application/json"))
+                .andReturn()
+                .getResponse();
+        List<Player> actual = convertFromHttpResponse(response);
+
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(1, actual.size());
+        assertEquals(updated, actual.get(0).toBuilder().id(original.getId()).build());
+    }
+
 
     private List<Player> convertFromHttpResponse(MockHttpServletResponse response)
             throws JsonProcessingException, UnsupportedEncodingException {
