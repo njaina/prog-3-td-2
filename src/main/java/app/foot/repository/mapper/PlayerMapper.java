@@ -43,7 +43,7 @@ public class PlayerMapper {
                 .build();
     }
 
-    //TODO: add unit test ok and ko for this
+    //ODO: add unit test ok and ko for this
     public PlayerEntity toEntity(Player domain) {
         return PlayerEntity.builder()
                 .id(domain.getId())
@@ -52,12 +52,14 @@ public class PlayerMapper {
                 .guardian(domain.getIsGuardian())
                 .build();
     }
-    public PlayerEntity toUpdate(Player domain) {
-        PlayerEntity entity = playerRepository.findById(domain.getId()).orElse(new PlayerEntity());
-        entity.setName(domain.getName());
-        entity.setGuardian(domain.getIsGuardian());
-        entity.setTeam(teamRepository.findByName(domain.getTeamName()));
-        return entity;
-    }
+
+    public PlayerEntity toUpdateEntity(int id, Player domain) {
+        return PlayerEntity.builder()
+                .id(id)
+                .name(domain.getName())
+                .guardian(domain.getIsGuardian())
+                .build();
+        }
+
 
 }

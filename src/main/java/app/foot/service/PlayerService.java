@@ -3,6 +3,7 @@ package app.foot.service;
 import app.foot.model.Player;
 import app.foot.repository.PlayerRepository;
 import app.foot.repository.PlayerScoreRepository;
+import app.foot.repository.entity.PlayerEntity;
 import app.foot.repository.mapper.PlayerMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,8 +32,10 @@ public class PlayerService {
                 .map(mapper::toDomain)
                 .collect(Collectors.toUnmodifiableList());
     }
-    public Player updatePlayer(app.foot.model.Player player) {
-        return mapper.toDomain(repository.save(mapper.toUpdate(player)));
-    }
 
+    public Player updatePlayer(int id, Player player) {
+        PlayerEntity playerEntity = mapper.toUpdateEntity(id, player);
+        PlayerEntity updatedPlayerEntity = repository.save(playerEntity);
+        return mapper.toDomain(updatedPlayerEntity);
+    }
 }

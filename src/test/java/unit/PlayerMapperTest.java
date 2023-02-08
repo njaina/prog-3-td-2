@@ -123,4 +123,5 @@ public class PlayerMapperTest {
 
         assertEquals(expected, actual);
     }
+
 }
