@@ -10,6 +10,7 @@ import app.foot.repository.entity.PlayerEntity;
 import app.foot.repository.entity.PlayerScoreEntity;
 import app.foot.repository.entity.TeamEntity;
 import app.foot.repository.mapper.PlayerMapper;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.OngoingStubbing;
 import utils.TestUtils;
@@ -67,7 +68,7 @@ public class PlayerMapperTest {
                 .ownGoal(false)
                 .build());
 
-        assertEquals(rakotoScorer(), actual);
+        Assertions.assertEquals(rakotoScorer(), actual);
     }
 
     @Test
