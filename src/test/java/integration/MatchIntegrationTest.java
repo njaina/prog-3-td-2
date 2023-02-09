@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.mock.http.server.reactive.MockServerHttpRequest.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static utils.TestUtils.player1;
 
 @SpringBootTest(classes = FootApi.class)
 @AutoConfigureMockMvc
@@ -57,11 +58,26 @@ class MatchIntegrationTest {
         assertEquals(HttpStatus.OK.value(), response.getStatus());
         assertEquals(3, actual.size());
         assertTrue(actual.containsAll(List.of(
-                expectedMatch2())));
+                expectedMatch1(),
+                expectedMatch2(),
+                expectedMatch3())));
     }
 
+    //TODO: add these checks and its values
+    //assertTrue(actual.contains(expectedMatch1()));
+    //assertTrue(actual.contains(expectedMatch3()));
 
 
+
+    private static Match expectedMatch1(){
+        return Match.builder()
+                .id(1)
+                .teamA(teamMatchA1())
+                .teamB(teamMatchB1())
+                .stadium("S1")
+                .datetime(Instant.parse("2023-01-01T10:00:00"))
+                .build();
+    }
     private static Match expectedMatch2() {
         return Match.builder()
                 .id(2)
@@ -69,6 +85,16 @@ class MatchIntegrationTest {
                 .teamB(teamMatchB())
                 .stadium("S2")
                 .datetime(Instant.parse("2023-01-01T14:00:00Z"))
+                .build();
+    }
+
+    private static Match expectedMatch3(){
+        return Match.builder()
+                .id(3)
+                .teamA(teamMatchA())
+                .teamB(teamMatchB())
+                .stadium("S3")
+                .datetime(Instant.parse("2023-01-01T18:00:00Z"))
                 .build();
     }
 
@@ -96,19 +122,52 @@ class MatchIntegrationTest {
                                 .build()))
                 .build();
     }
-
-    private static Team team3() {
-        return Team.builder()
-                .id(3)
-                .name("E3")
+    private static TeamMatch teamMatchA1() {
+        return TeamMatch.builder()
+                .team(team2())
+                .score(4)
+                .scorers(List.of(PlayerScorer.builder()
+                                .player(player1())
+                                .scoreTime(30)
+                                .isOG(false)
+                                .build(),
+                        PlayerScorer.builder()
+                                .player(player1())
+                                .scoreTime(20)
+                                .isOG(false)
+                                .build(),
+                        PlayerScorer.builder()
+                                .player(player1())
+                                .scoreTime(10)
+                                .isOG(false)
+                                .build()))
+                .build();
+    }
+    private static TeamMatch teamMatchB1() {
+        return TeamMatch.builder()
+                .team(team2())
+                .score(2)
+                .scorers(List.of(PlayerScorer.builder()
+                                .player(player2())
+                                .scoreTime(40)
+                                .isOG(true)
+                                .build(),
+                        PlayerScorer.builder()
+                                .player(player3())
+                                .scoreTime(50)
+                                .isOG(false)
+                                .build()))
                 .build();
     }
 
-    private static Player player6() {
+
+
+
+    private static Player player2() {
         return Player.builder()
-                .id(6)
-                .name("J6")
-                .teamName(team3().getName())
+                .id(2)
+                .name("J2")
+                .teamName(team1().getName())
                 .isGuardian(false)
                 .build();
     }
@@ -121,6 +180,20 @@ class MatchIntegrationTest {
                 .isGuardian(false)
                 .build();
     }
+    private static Player player6() {
+        return Player.builder()
+                .id(6)
+                .name("J6")
+                .teamName(team3().getName())
+                .isGuardian(false)
+                .build();
+    }
+    private static Team team1() {
+        return Team.builder()
+                .id(1)
+                .name("E1")
+                .build();
+    }
 
     private static Team team2() {
         return Team.builder()
@@ -128,6 +201,13 @@ class MatchIntegrationTest {
                 .name("E2")
                 .build();
     }
+    private static Team team3() {
+        return Team.builder()
+                .id(3)
+                .name("E3")
+                .build();
+    }
+
     private List<Match> convertFromHttpResponse(MockHttpServletResponse response)
             throws JsonProcessingException, UnsupportedEncodingException {
         CollectionType matchesListType = objectMapper.getTypeFactory()
