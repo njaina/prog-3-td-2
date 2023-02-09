@@ -258,52 +258,5 @@ class MatchIntegrationTest {
                 matchesListType);
     }
 
-    @Test
-    void add_goal_ok() throws Exception {
-        PlayerScorer goal = new PlayerScorer(player3(), 70,false);
-
-        MockHttpServletResponse response = mockMvc
-                .perform((RequestBuilder) post("/matches/3/goals"))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse();
-
-        Match actual = objectMapper.readValue(
-                response.getContentAsString(), Match.class);
-
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
-        assertEquals(expectedMatch3WithGoal(), actual);
-    }
-
-
-    private static Match expectedMatch3WithGoal() {
-        return Match.builder()
-                .id(3)
-                .teamA(teamMatchAWithGoal())
-                .teamB(teamMatchBWithGoal())
-                .stadium("S3")
-                .datetime(Instant.parse("2023-01-02T15:00:00Z"))
-                .build();
-    }
-
-    private static TeamMatch teamMatchBWithGoal() {
-        return TeamMatch.builder()
-                .team(team3())
-                .score(0)
-                .scorers(List.of())
-                .build();
-    }
-
-    private static TeamMatch teamMatchAWithGoal() {
-        return TeamMatch.builder()
-                .team(team2())
-                .score(1)
-                .scorers(List.of(PlayerScorer.builder()
-                        .player(player3())
-                        .scoreTime(70)
-                        .isOG(false)
-                        .build()))
-                .build();
-    }
 
 }

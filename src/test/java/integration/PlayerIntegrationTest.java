@@ -2,6 +2,8 @@ package integration;
 
 import app.foot.FootApi;
 import app.foot.controller.rest.Player;
+import app.foot.controller.rest.mapper.PlayerRestMapper;
+import app.foot.service.PlayerService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
@@ -11,19 +13,27 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.event.annotation.AfterTestMethod;
 import org.springframework.test.context.event.annotation.BeforeTestMethod;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FootApi.class)
 @AutoConfigureMockMvc
@@ -31,6 +41,11 @@ class PlayerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    @MockBean
+    private PlayerService playerService;
+
+    @MockBean
+    private PlayerRestMapper playerRestMapper;
 
     Player player1() {
         return Player.builder()
@@ -118,6 +133,27 @@ class PlayerIntegrationTest {
         assertEquals(updated, actual.get(0).toBuilder().id(original.getId()).build());
     }
 
+    @Test
+    void testUpdatePlayer() throws Exception {
+        Player player = Player.builder()
+                .id(12)
+                .name("John Doe")
+                .isGuardian(false)
+                .build();
+
+        when(playerService.updatePlayer(any(app.foot.model.Player.class))).thenReturn(app.foot.model.Player.builder().build());
+        when(playerRestMapper.toRest(any(app.foot.model.Player.class))).thenReturn(player);
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .put("/players/{id}", 12)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(player));
+
+        ResultActions resultActions = mockMvc.perform(requestBuilder);
+
+        resultActions.andExpect(status().isOk());
+    }
 
     private List<Player> convertFromHttpResponse(MockHttpServletResponse response)
             throws JsonProcessingException, UnsupportedEncodingException {
