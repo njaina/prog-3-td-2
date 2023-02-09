@@ -12,16 +12,12 @@ import app.foot.repository.entity.TeamEntity;
 import app.foot.repository.mapper.PlayerMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.stubbing.OngoingStubbing;
-import utils.TestUtils;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.Optional.empty;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static utils.TestUtils.*;
