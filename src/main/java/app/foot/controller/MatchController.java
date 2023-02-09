@@ -39,4 +39,5 @@ public class MatchController {
                 .toList();
         return mapper.toRest(service.addGoals(matchId, scorerList));
     }
+
 }

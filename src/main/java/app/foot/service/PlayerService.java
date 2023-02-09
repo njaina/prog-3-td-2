@@ -1,6 +1,7 @@
 package app.foot.service;
 
 import app.foot.model.Player;
+import app.foot.repository.MatchRepository;
 import app.foot.repository.PlayerRepository;
 import app.foot.repository.PlayerScoreRepository;
 import app.foot.repository.entity.PlayerEntity;
@@ -18,6 +19,7 @@ public class PlayerService {
     private final PlayerMapper mapper;
 
     private final PlayerScoreRepository playerScoreRepository;
+    private final MatchRepository matchRepository;
 
     public List<Player> getPlayers() {
         return repository.findAll().stream()
@@ -33,9 +35,10 @@ public class PlayerService {
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    public Player updatePlayer(int id, Player player) {
-        PlayerEntity playerEntity = mapper.toUpdateEntity(id, player);
-        PlayerEntity updatedPlayerEntity = repository.save(playerEntity);
-        return mapper.toDomain(updatedPlayerEntity);
+    public Player updatePlayer(Player player) {
+        PlayerEntity entity = repository.findById(player.getId()).get();
+        entity = mapper.updateMapper(player, entity);
+        entity = repository.save(entity);
+        return mapper.toDomain(entity);
     }
 }

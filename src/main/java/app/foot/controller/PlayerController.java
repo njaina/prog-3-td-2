@@ -36,14 +36,12 @@ public class PlayerController {
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    //TODO: add PUT /players where you can modify the name and the guardian status of a player
+    // TODO: add PUT /players where you can modify the name and the guardian status of a player
     // Don't forget to add integration tests for this
-
-    /**@PutMapping("/players")
-    public ResponseEntity<Player> updatePlayer(@PathVariable int id, @RequestBody Player player) {
-        PlayerEntity playerEntity = playerMapper.toUpdateEntity(id, player);
-        service.updatePlayer(Integer id,playerEntity);
-        return ResponseEntity.ok(playerMapper.toDomain(playerEntity));
-    }*/
+    @PutMapping("/players/{id}")
+    public ResponseEntity<Player> updatePlayer(@PathVariable long id, @RequestBody Player player) {
+        app.foot.model.Player updated = service.updatePlayer(mapper.toDomain(player));
+        return ResponseEntity.ok(mapper.toRest(updated));
+    }
 
 }

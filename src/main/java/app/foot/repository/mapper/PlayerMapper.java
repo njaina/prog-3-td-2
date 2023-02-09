@@ -10,6 +10,8 @@ import app.foot.repository.entity.PlayerScoreEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import static ch.qos.logback.classic.spi.ThrowableProxyVO.build;
+
 @Component
 @AllArgsConstructor
 public class PlayerMapper {
@@ -25,6 +27,12 @@ public class PlayerMapper {
                 .teamName(entity.getTeam().getName())
                 .build();
     }
+    public PlayerEntity updateMapper(Player domain, PlayerEntity entity) {
+        entity.setName(domain.getName());
+        entity.setGuardian(domain.getIsGuardian());
+        return  entity;
+    }
+
 
     public PlayerScorer toDomain(PlayerScoreEntity entity) {
         return PlayerScorer.builder()
@@ -43,7 +51,7 @@ public class PlayerMapper {
                 .build();
     }
 
-    //ODO: add unit test ok and ko for this
+    //DONE: add unit test ok and ko for this
     public PlayerEntity toEntity(Player domain) {
         return PlayerEntity.builder()
                 .id(domain.getId())
@@ -52,14 +60,5 @@ public class PlayerMapper {
                 .guardian(domain.getIsGuardian())
                 .build();
     }
-
-    public PlayerEntity toUpdateEntity(int id, Player domain) {
-        return PlayerEntity.builder()
-                .id(id)
-                .name(domain.getName())
-                .guardian(domain.getIsGuardian())
-                .build();
-        }
-
 
 }
